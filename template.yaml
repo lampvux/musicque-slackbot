@@ -34,13 +34,13 @@ Resources:
       Description: A simple example includes a HTTP get method to get all items by
         id from a DynamoDB table.
       Policies:
-        # Give Create/Read/Update/Delete Permissions to the SampleTable
+        # Give Create/Read/Update/Delete Permissions to the MusicQueTable
       - DynamoDBCrudPolicy:
-          TableName: !Ref SampleTable
+          TableName: !Ref MusicQueTable
       Environment:
         Variables:
           # Make table name accessible as environment variable from function code during execution
-          SAMPLE_TABLE: !Ref SampleTable
+          MUSICQUE_TABLE: !Ref MusicQueTable
           # Make DynamoDB endpoint accessible as environment variable from function code during execution
           ENDPOINT_OVERRIDE: ''
       Events:
@@ -68,13 +68,13 @@ Resources:
       Description: A simple example includes a HTTP get method to get one item by
         id from a DynamoDB table.
       Policies:
-        # Give Create/Read/Update/Delete Permissions to the SampleTable
+        # Give Create/Read/Update/Delete Permissions to the MusicQueTable
       - DynamoDBCrudPolicy:
-          TableName: !Ref SampleTable
+          TableName: !Ref MusicQueTable
       Environment:
         Variables:
           # Make table name accessible as environment variable from function code during execution
-          SAMPLE_TABLE: !Ref SampleTable
+          MUSICQUE_TABLE: !Ref MusicQueTable
           # Make DynamoDB endpoint accessible as environment variable from function code during execution
           ENDPOINT_OVERRIDE: ''
       Events:
@@ -102,12 +102,12 @@ Resources:
       Description: A simple example includes a HTTP post method to add one item to
         a DynamoDB table.
       Policies:
-        # Give Create/Read/Update/Delete Permissions to the SampleTable
+        # Give Create/Read/Update/Delete Permissions to the MusicQueTable
       - DynamoDBCrudPolicy:
-          TableName: !Ref SampleTable
+          TableName: !Ref MusicQueTable
       Environment:
         Variables:
-          SAMPLE_TABLE: !Ref SampleTable
+          MUSICQUE_TABLE: !Ref MusicQueTable
           # Make DynamoDB endpoint accessible as environment variable from function code during execution
           ENDPOINT_OVERRIDE: ''
       Events:
@@ -122,11 +122,11 @@ Resources:
   # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlesssimpletable
 
   # DynamoDB table to store item: {id: &lt;ID&gt;, name: &lt;NAME&gt;}
-  SampleTable:
+  MusicQueTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
       PrimaryKey:
-        Name: id
+        Name: id 
         Type: String
       ProvisionedThroughput:
         ReadCapacityUnits: 2

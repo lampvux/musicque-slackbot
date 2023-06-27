@@ -20,7 +20,7 @@ else{
 const ddbDocClient = DynamoDBDocumentClient.from(ddbClient);
 
 // Get the DynamoDB table name from environment variables
-const tableName = process.env.SAMPLE_TABLE;
+const tableName = process.env.MUSICQUE_TABLE;
 
 /**
  * A simple example includes a HTTP get method to get one item by id from a DynamoDB table.

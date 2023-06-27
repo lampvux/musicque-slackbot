@@ -134,11 +134,11 @@ docker inspect <container_name_or_id> -f  '{{range .NetworkSettings.Networks}}{{
 {
     "getByIdFunction": {
         "ENDPOINT_OVERRIDE": "http://172.17.0.2:8000",
-        "SAMPLE_TABLE": "SampleTable"
+        "MUSICQUE_TABLE": "SampleTable"
     },
     "putItemFunction": {
         "ENDPOINT_OVERRIDE": "http://172.17.0.2:8000",
-        "SAMPLE_TABLE": "SampleTable"
+        "MUSICQUE_TABLE": "SampleTable"
     }
 }
 ```
