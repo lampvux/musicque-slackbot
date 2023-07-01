@@ -9,6 +9,7 @@ stack_name = "wemusic-sam"
 [default.build.parameters]
 cached = true
 parallel = true
+container_env_var_file = "env.json"
 
 [default.validate.parameters]
 lint = true
