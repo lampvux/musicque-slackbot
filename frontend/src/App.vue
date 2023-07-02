@@ -1,10 +1,6 @@
 <template>
   <div>
-    <div>
-        <div id="logo">
-          <img :src="'./logo.png'" />
-        </div>
-    </div>
+    
     <h2>Hi, I Am MUSICQUE</h2>
     <hr />  
     
