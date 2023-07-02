@@ -37,7 +37,7 @@ export const getByIdHandler = async (event) => {
  
   // Get the item from the table
   // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#get-property
-  var params = {
+  const params = {
     TableName : tableName,
     Key: { id: id },
   };

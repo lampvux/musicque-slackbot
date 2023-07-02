@@ -66,8 +66,9 @@ const transformYoutubeDataToMusicQueData = (youtubeData) => {
   const title = youtubeData.title;
   const thumbnailUrl = youtubeData.thumbnail_url;
   const s3PublicUrl = youtubeData.s3PublicUrl;
+  const s3Key = youtubeData.s3Key;
 
-  return { id, url, title, thumbnailUrl, s3PublicUrl };
+  return { id, url, title, thumbnailUrl, s3PublicUrl, s3Key };
 };
 
 // download and upload video to s3 bucket
@@ -84,7 +85,7 @@ const downloadAndUploadToS3 = async (youtubeUrl, videoTitle, s3BucketName, s3Key
 
   const videoBuffer = fs.readFileSync(`/tmp/${videoTitle}.mp4`);
 
-  await s3.putObject({
+  const {Key} =  await s3.putObject({
     Bucket: s3BucketName,
     Key: s3Key,
     Body: videoBuffer,
@@ -94,14 +95,14 @@ const downloadAndUploadToS3 = async (youtubeUrl, videoTitle, s3BucketName, s3Key
 
   const s3PublicUrl = `https://${s3BucketName}.s3.amazonaws.com/${s3Key}`;
 
-  return s3PublicUrl;
+  return { Key, s3PublicUrl};
 };
 
 // PUT Item to DynamoDB
 const putDataToDynamoDB = async (data) => {  
   // Creates a new item, or replaces an old item with a new item
   // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#put-property
-  var params = {
+  const params = {
       TableName : tableName,
       Item: data
   };
@@ -124,11 +125,16 @@ const putDataToDynamoDB = async (data) => {
 const start = async ({ message, say }) => {
   try {
 
-    message = message.text;    
+    message = message.text;
+
     const youtubeUrl = getYoutubeUrlFromMessage(message);
-    const youtubeData = await getYoutubeData(youtubeUrl);
+    const youtubeData = await getYoutubeData(youtubeUrl);    
+    const {Key, s3PublicUrl} = await downloadAndUploadToS3(youtubeUrl, youtubeData.title, s3BucketName, s3Key );
+    // set more data to be saved to dynamodb
     youtubeData.url = youtubeUrl;
-    youtubeData.s3PublicUrl = await downloadAndUploadToS3(youtubeUrl, youtubeData.title, s3BucketName, s3Key );
+    youtubeData.s3PublicUrl = s3PublicUrl;
+    youtubeData.s3Key = Key;
+
     const musicQueData = transformYoutubeDataToMusicQueData(youtubeData);
 
     const data = await putDataToDynamoDB(musicQueData);

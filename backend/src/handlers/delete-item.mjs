@@ -22,6 +22,21 @@ const ddbDocClient = DynamoDBDocumentClient.from(ddbClient);
 // Get the DynamoDB table name from environment variables
 const tableName = process.env.MUSICQUE_TABLE;
 
+// function to delete S3 object
+const deleteS3Object = async (key) => {
+  const params = {
+    Bucket: process.env.S3_BUCKET_NAME,
+    Key: key
+  };
+  try {
+    await s3.send(new DeleteObjectCommand(params));
+    console.log(`Successfully deleted ${key} from ${process.env.S3_BUCKET_NAME}`);
+  } catch (err) {
+    console.error(`Error deleting ${key} from ${process.env.S3_BUCKET_NAME}: ${err}`);
+    throw err;
+  }
+}
+
 
 /**
  * A simple example includes a HTTP get method to get one item by id from a DynamoDB table.
@@ -38,12 +53,17 @@ export const deleteByIdHandler = async (event) => {
    
     // Get the item from the table
     // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#get-property
-    var params = {
+    const params = {
       TableName : tableName,
       Key: { id: id },
     };
-  
+
     try {
+      // get the data from the table
+      const data = await ddbDocClient.send(new GetCommand(params));
+      var item = data.Item;
+      await deleteS3Object(item.s3Key)
+
       await ddbDocClient.send(new DeleteCommand(params));
       console.log(`Item with ID ${id} deleted from table ${tableName}`);
     } catch (err) {

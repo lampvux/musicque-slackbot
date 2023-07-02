@@ -33,6 +33,8 @@ jobs:
         run: |
           sam deploy --template-file template.yml --config-file samconfig.toml --capabilities CAPABILITY_IAM
         env:
+          SLACK_SIGNING_SECRET: ${{secrets.SLACK_SIGNING_SECRET}}
+          SLACK_BOT_TOKEN: ${{secrets.SLACK_BOT_TOKEN}}
           MUSICQUE_TABLE: ${{secrets.MUSICQUE_TABLE}}
           S3_BUCKET: ${{secrets.S3_BUCKET_NAME}}
           S3_KEY: ${{secrets.S3_KEY}}
